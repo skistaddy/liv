@@ -1,0 +1,50 @@
+# built-in operators
+{
+    ?{}.type #=> "object"
+    5 + 5 #=> 10
+    5 - 5 #=> 0
+    5 > 4 #=> true
+    5 < 4 #=> false
+    5.out() #=> '5'
+}
+
+# objects
+myObj = {
+    name = "bert" # local variable
+    .name = name # key
+}
+
+out(?myObj) #=> { .name = "myObj", .keys = ["name"], .type = "object" }
+
+# operators
+new` = (obj){
+    i = 0
+    return = {}
+    while(i < ?obj.keys.length(), {
+        key = ?obj.keys[i]
+        return[key] = obj[key]
+        i++
+    })
+    ?return.type = ?obj.name
+    return
+}
+
+!` = (exp){ # "`" defines on what sides an operator accepts inputs
+    if(exp, {
+        false
+    }).else({
+        true
+    })
+}
+
+`&&` = (x, y){
+    if(x, {
+        if(y, {
+            true
+        }).else({
+            false
+        })
+    }).else({
+        false
+    })
+}
