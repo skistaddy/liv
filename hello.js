@@ -3,6 +3,14 @@ function person(name, age){
     this.age = age
 }
 
-john = person("john", "21")
+function New(obj){
+    res = {}
+    for(i in Object.keys(obj)){
+        res[obj[Object.keys(obj)[i]]] = obj[Object.keys(obj)[i]]
+    }
 
-console.log(john.name)
+    return res
+}
+
+
+console.log(john)

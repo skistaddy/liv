@@ -1,0 +1,26 @@
+{ # objects don't need to have parameters
+    out("some words are never said")
+}
+
+(name){ # parameters act as local variables
+    out("my name is " + name)
+}("john doe") # 'john doe'
+
+{
+    .joke = "knock knock" # a period turns a variable into an attribute
+}.joke>>out # 'knock knock'
+
+func = { # they can be assigned to variables
+    out("these words are said")
+    .secret = "so are these"
+}
+func() # 'these words are said'
+func.secret>>out # 'so are these'
+?func >> out # { .type = "object" .keys = [ "secret" ] .name = "func" }
+
+{
+    "any expression causes an object to return"
+} >> out # 'any expression causes an object to return'
+
+func["secret"] # bracket-string attribute notation
+    >> out # 'so are these'

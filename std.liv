@@ -17,6 +17,10 @@ myObj = {
 out(?myObj) #=> { .name = "myObj", .keys = ["name"], .type = "object" }
 
 # operators
+`>>` = (x, y){
+    y(x)
+}
+
 new` = (obj){
     i = 0
     return = {}
