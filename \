@@ -5,23 +5,13 @@ import (
 )
 
 type Token struct {
-    Type TokenType
+    Type string
     Value string
 }
 
-type TokenType int
-
-const (
-    ID TokenType = iota
-    Flow
-    Op
-    Number
-    String
-)
-
 func lex(data string) []Token {
     chars := []string{" ", "=", "{", "}", "(", ")", "[", "]", "\n"}
-    ops := []string{"+", "!", "~", "%", "*", "&", "/", ":", "-", "|", "^"}
+    ops := []string{".", "+", "!", "~", "%", "*", "&", "/", ":", "-", "|", "^"}
     numbers := []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
 
     tokens := []Token{}
@@ -29,17 +19,17 @@ func lex(data string) []Token {
     comment := false
     str := ' '
     
-    consume := func(Type TokenType){
+    consume := func(Type string){
         number := true
         if tok == " " || tok == "\n" {
             tok = ""
         }
         for _, n := range tok {
-            if !slices.Contains(numbers, string(n)){
+            if slices.Contains(numbers, string(n)){
                 number = false
             }
         }
-        if number { Type = Number }
+        if num { Type = "number" }
         if len(tok) > 0 {
             tokens = append(tokens, Token{Type, tok})
             tok = ""
@@ -57,32 +47,32 @@ func lex(data string) []Token {
             }
             tok = ""
         } else if token == '#' {
-            consume(ID)
+            consume("id")
             comment = true
         } else if str != ' ' {
             tok += st
             if token == str {
                 str = ' '
-                consume(String)
+                consume("string")
             }
         } else if token == '"' || token == '\'' {
-            consume(ID)
+            consume("id")
             str = token
             tok = st
         } else if slices.Contains(chars, st) {
-            consume(ID)
+            consume("id")
             tok = st
-            consume(Flow)
+            consume("flow")
         } else if slices.Contains(ops, st) {       
-            consume(ID)
+            consume("id")
             tok = st
-            consume(Op)
+            consume("op")
         } else {
             tok += st
         }
     }
 
-    consume(ID)
+    consume("id")
 
     return tokens
 }

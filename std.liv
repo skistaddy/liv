@@ -1,0 +1,14 @@
+bool: bool = {}
+true: bool = (x, y){ x }
+false: bool = (x, y){ y }
+
+if = (cond: bool, then: obj){ cond then false }
+else = (cond: bool, then: obj){ cond then false }
+
+is = (x, y){
+    if x.type == y.type {
+        true
+    } else {
+        false
+    }
+} -> bool

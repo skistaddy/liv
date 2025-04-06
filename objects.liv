@@ -1,0 +1,46 @@
+# objects are blocks of code
+{
+    out "hello from inside an object"
+}() #=> hello from inside an object!
+
+# objects can accept parameters
+(name: str){
+    out ["your name is" name]
+}("baran") #=> your name is baran
+
+# objects are evaluated on reference
+sayBaran = { out "baran" }
+sayBaran #=> baran
+
+# this can be circumvented with curly braces
+again = { sayBaran }
+again #=> baran
+
+# any literal in an object will be returned
+func = {
+    out "this line returns no literal"
+    "this one does"
+}
+
+# objects literals can be forced to evaluate with a parentheses call
+value = { "baran" }()
+
+if value == "baran" { out "the object was evaluated!" } #=> the object was evaluated!
+
+# these rules allow for expressive function chaining
+add = (target, val){ target + val }
+name = { "baran" }
+name add " skistad" out #=> baran skistad
+
+# objects can be called in a myriad of ways
+add(value name) #=> baranbaran
+value add name #=> baranbaran
+value name add #=> baranbaran
+(add value name) #=> baranbaran
+
+# variables are local to object scope
+{ private = "can't find me" }
+out private #=> error: private not defined in scope
+
+# variables can be defined as keys with a period
+{ .public = "out in the open" }.public out #=> out in the open
