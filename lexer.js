@@ -33,9 +33,11 @@ function lex(data){
                 number = false
             }
         }
+        type = number ? "number" : type
         if (tok.length > 0){
             tokens.push(new Token(type, tok, line, ch))
         }
+        ch += tok.length
         tok = ""
     }
 
@@ -48,22 +50,26 @@ function lex(data){
             } else if (cur == "#"){
                 comment = false
             }
+            ch++
             tok = ""
         } else if(string){
             if(cur == string){
                 string = ""
                 consume("string")
+                ch++
             } else {
                 tok += cur
             }
         } else if(cur == " "){
             consume("id")
+            ch++
         } else if(cur == "#"){
             consume("id")
             comment = true
         } else if(cur == "\"" || cur == "'"){
             consume("id")
             string = cur
+            ch++
         } else if(cur == "\n"){
             consume("id")
             newline()
@@ -78,7 +84,6 @@ function lex(data){
         } else {
             tok += cur
         }
-        ch++
     }
     consume("id")
 

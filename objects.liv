@@ -1,46 +1,41 @@
 # objects are blocks of code
 {
-    out "hello from inside an object"
-}() #=> hello from inside an object!
-
-# objects can accept parameters
-(name: str){
-    out ["your name is" name]
-}("baran") #=> your name is baran
-
-# objects are evaluated on reference
-sayBaran = { out "baran" }
-sayBaran #=> baran
-
-# this can be circumvented with curly braces
-again = { sayBaran }
-again #=> baran
-
-# any literal in an object will be returned
-func = {
-    out "this line returns no literal"
-    "this one does"
+    out "i'm an object!"
 }
 
-# objects literals can be forced to evaluate with a parentheses call
-value = { "baran" }()
+# they can accept parameters
+(name: str){
+    out("your name is " + name)
+}
 
-if value == "baran" { out "the object was evaluated!" } #=> the object was evaluated!
+# literal values cause an object to return
+var = { "this is in a var" }
+var out #=> this is in a var
 
-# these rules allow for expressive function chaining
-add = (target, val){ target + val }
-name = { "baran" }
-name add " skistad" out #=> baran skistad
+# object literals are evaluated on reference
+{
+    out "i won't ever run :("
+}
 
-# objects can be called in a myriad of ways
-add(value name) #=> baranbaran
-value add name #=> baranbaran
-value name add #=> baranbaran
-(add value name) #=> baranbaran
+ref = { out "but i will! :D" }
+ref #=> but i will! :D
 
-# variables are local to object scope
-{ private = "can't find me" }
-out private #=> error: private not defined in scope
+# this can be prevented by wrapping the variable in an object
+{ ref } out #=> error: can't print object
 
-# variables can be defined as keys with a period
-{ .public = "out in the open" }.public out #=> out in the open
+# object literals can be explicitly evaluated as well
+{
+    out "this is being output!"
+}() #=> this is being output!
+
+# variables are local to scope
+{
+    hello = "hello"
+}
+out hello #=> hello not defined
+
+(name){
+    thisName = name
+}
+
+out thisName

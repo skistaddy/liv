@@ -1,7 +1,6 @@
-lexer = require("./lexer")
 fs = require("fs")
 path = require("path")
-
+parser = require("./parser")
 args = process.argv
 
 if(args.length <= 2){
@@ -9,11 +8,8 @@ if(args.length <= 2){
 } else if(args[2] == "-h" || args[2] == "--help"){
     console.log("help")
 } else {
-    console.log(args[2])
     if(fs.existsSync(args[2])){
-        output = lexer(fs.readFileSync(path.join(__dirname, args[2]), "utf8"))
-        for(i in tokens){
-            console.log(tokens[i].value)
-        }
+        output = new parser(fs.readFileSync(path.join(__dirname, args[2]), "utf8"))
+        //console.log(output)
     }
 }
