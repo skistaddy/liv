@@ -113,7 +113,6 @@ function parseExpression(p){
 function parse(p){
     while (p.notEOF) {
         node = parseExpression(p)
-        console.log(node)
         p.tree.push(node)
         p.next()
     }

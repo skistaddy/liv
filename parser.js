@@ -20,7 +20,7 @@ class Parser {
         if(this.index + 1 < this.tokens.length){
             return this.tokens[this.index + 1]
         } else {
-            return {type: ""}
+            return { type: "" }
         }
     }
 
