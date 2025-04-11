@@ -29,10 +29,10 @@ ref #=> but i will! :D
 }() #=> this is being output!
 
 # variables are local to scope
-{
+(){
     hello = "hello"
 }
-out hello #=> hello not defined
+out hello #=> error: hello not defined
 
 (name){
     thisName = name
