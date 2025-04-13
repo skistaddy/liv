@@ -33,9 +33,3 @@ ref #=> but i will! :D
     hello = "hello"
 }
 out hello #=> error: hello not defined
-
-(name){
-    thisName = name
-}
-
-out thisName
