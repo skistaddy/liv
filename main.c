@@ -28,12 +28,18 @@ char* readfile(char* filename){
     return buffer;
 }
 
+char help[] = 
+"usage: %s [options] [file]\n"
+"\n"
+"options:\n"
+"  -h, --help  print this screen\n";
+
+
 int main(int argc, char* argv[]){
     if(argc == 1){
-        printf("%s", argv[0]);
+        printf("repl");
     } else if(strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0){
-        printf("help");
-        printf("%d", strcmp(argv[1], "-h"));
+        printf(help, argv[0]);
     } else {
         char* data = readfile(argv[1]);
         parse(data);

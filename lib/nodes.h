@@ -1,44 +1,55 @@
+#include <stdlib.h>
 #include "token.h"
 #ifndef NODES_H
 #define NODES_H
 
+typedef enum {
+    IDNode,
+    StringNode,
+    NumberNode,
+    GroupNode,
+    ObjectNode,
+    DeclarationNode
+} NodeType;
 
 typedef struct {
     char* value;
     char* type;
-} Identifier;
+} IdentifierStruct;
 
 typedef struct {
     char* value;
-} StringLiteral;
+} StringStruct;
 
 typedef struct {
     char* value;
-} NumberLiteral;
+} NumberStruct;
 
 typedef struct {
     struct Node **nodes;
-} Group;
+    size_t size;
+} GroupStruct;
 
 typedef struct {
-    Group params;
+    GroupStruct params;
     struct Node **body;
-} ObjectLiteral;
+    size_t size;
+} ObjectStruct;
 
 typedef struct {
-    Identifier name;
+    IdentifierStruct name;
     struct Node *value;
-} Declaration;
+} DeclarationStruct;
 
 typedef struct Node {
-    int kind;
+    NodeType type;
     union {
-        Identifier identifier;
-        StringLiteral stringLiteral;
-        NumberLiteral numberLiteral;
-        ObjectLiteral objectLiteral;
-        Group group;
-        Declaration declaration;
+        IdentifierStruct  Identifier;
+        StringStruct      StringLiteral;
+        NumberStruct      NumberLiteral;
+        ObjectStruct      ObjectLiteral;
+        GroupStruct       Group;
+        DeclarationStruct Declaration;
     };
 } Node;
 

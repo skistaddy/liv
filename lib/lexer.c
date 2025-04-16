@@ -2,29 +2,18 @@
 #include <stdlib.h>
 #include <string.h>
 #include "token.h"
-
-typedef struct {
-    char* data;
-    int index;
-    Token* tokens;
-    int size;
-    int line;
-    int col;
-    int comment;
-    char string;
-    char* tok;
-} Lexer;
+#include "lexer.h"
 
 char* flow = "={}()[]:";
 char* ops = "+!~%*&/-|^"; 
 char* nums = "1234567890";
 
-int has(char* array, char seek){
+static int has(char* array, char seek){
     if(strchr(array, seek)) return 1;
     return 0;
 }
 
-void initLexer(Lexer* l, char* data){
+static void init(Lexer* l, char* data){
     l->data = data;
     l->size = 0;
     l->tokens = malloc(sizeof(Token));
@@ -37,19 +26,19 @@ void initLexer(Lexer* l, char* data){
     l->tok[0] = '\0';
 }
 
-void add(Lexer* l, char c){
+static void add(Lexer* l, char c){
     int length = strlen(l->tok);
     l->tok = realloc(l->tok, length + 2);
     l->tok[length] = c;
     l->tok[length + 1] = '\0';
 }
 
-void reset(Lexer* l){
+static void reset(Lexer* l){
     l->tok = realloc(l->tok, 1);
     l->tok[0] = '\0';
 }
 
-void consume(Lexer* l, enum TokenType type){
+static void consume(Lexer* l, enum TokenType type){
     if(l->tok != ' ' && l->tok != '\t' && strcmp(l->tok, "") != 0){
         l->size++;
         l->tokens = realloc(l->tokens, l->size * sizeof(Token));
@@ -62,7 +51,7 @@ void consume(Lexer* l, enum TokenType type){
     }
 }
 
-void flowConsume(Lexer* l){
+static void flowConsume(Lexer* l){
     switch(l->tok[0]){
         case '=':
             consume(l, Equals);
@@ -91,22 +80,22 @@ void flowConsume(Lexer* l){
     }
 }
 
-void newline(Lexer* l){
+static void newline(Lexer* l){
     l->line++;
     l->col = 1;
     reset(l);
 }
 
-char cur(Lexer* l){
+static char cur(Lexer* l){
     //printf("%c%d\n", l->data[l->index], l->index);
-    return l->data[l->index];
+     return l->data[l->index];
 }
 
-void next(Lexer* l){
+static void next(Lexer* l){
     l->index++;
 }
 
-void check(Lexer* l){
+static void check(Lexer* l){
     char c = cur(l);
 
     if(l->comment){
@@ -152,18 +141,20 @@ void check(Lexer* l){
     }
 }
 
-Token* lex(char* data){
+Lexer lex(char* data){
     Lexer l;
-    initLexer(&l, data);
+    init(&l, data);
 
     while(l.index < strlen(l.data)){
         check(&l);
         next(&l);
     }
-
+    
+    /*
     for(int i = 0; i < l.size; i++){
         printf("%s\n", l.tokens[i].value);
     }
+    */
 
-    return l.tokens;
+    return l;
 }

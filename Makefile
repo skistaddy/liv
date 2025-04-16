@@ -1,27 +1,25 @@
 CC = cc
 FLAGS = -Wall
 
-liv: main.o
-	$(CC) $(FLAGS) -o liv main.o lexer.o parser.o
+liv: main.o parser.o lexer.o
+	$(CC) $(FLAGS) -o $@ $^
 	rm -f *.o
 
-main.o: parser.o
+main.o: main.c lib/parser.h
 	$(CC) $(FLAGS) -c main.c
 
-parser.o: lexer.o nodes.o
-	$(CC) $(FLAGS) -c lib/parser.c lib/parser.h
+parser.o: lib/parser.c lib/parser.h lib/nodes.h lib/lexer.h
+	$(CC) $(FLAGS) -c lib/parser.c
 
-lexer.o: token.o
-	$(CC) $(FLAGS) -c lib/lexer.c lib/lexer.h
+lexer.o: lib/lexer.c lib/lexer.h lib/token.h
+	$(CC) $(FLAGS) -c lib/lexer.c
 	
-token.o:
-	$(CC) $(FLAGS) -c lib/token.h
-
-nodes.o:
-	$(CC) $(FLAGS) -c lib/nodes.h
+.PHONY: clean rebuild run
 
 clean:
 	rm -f *.o liv */*.gch
 
-run: clean liv
+rebuild: clean liv
+
+run: liv
 	./liv $(path)
