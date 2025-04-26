@@ -126,7 +126,7 @@ Node* parseExpression(Parser* p){
                 next(p);
                 node->type = DeclarationNode;
                 node->Declaration.name = id->Identifier;
-                next(p);
+                //next(p);
                 node->Declaration.value = parseExpression(p);
             } else {
                 node->Identifier.value = id->Identifier.value;
@@ -148,7 +148,7 @@ Node* parseExpression(Parser* p){
         case LCurly:
             GroupStruct params = {};
             node = parseObject(p, params);
-            printf("outside obj");
+            printf("outside obj\n");
             break;
         case Op:
             id = parseID(p);
@@ -204,7 +204,7 @@ GroupStruct parseGroup(Parser* p){
 }
 
 Node* parseObject(Parser* p, GroupStruct params){
-    printf("inside obj");
+    printf("inside obj\n");
     next(p);
     ObjectStruct obj = { 
         .size = 0, 
