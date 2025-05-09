@@ -39,7 +39,8 @@ static char* getLine(Parser* p){
             }
         }
     }
-
+    
+    free(result);
     return result;
 }
 
@@ -53,6 +54,8 @@ static void error(Parser* p, char* msg){
     printf("error: %s\n", msg);
     printf("%s", getLine(p)); // don't need newline bc of getLine
     printf("%s^ at %d:%d", spaces, token.line, token.col);
+
+    free(spaces);
     exit(1);
 }
 
@@ -241,5 +244,6 @@ Node** parse(char *data){
 
     printf("finished parsing");
 
+    free(p->tree);
     return p.tree;  
 }

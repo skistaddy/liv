@@ -1,59 +1,22 @@
-# include standard lib
-@("std")
+# [ COMMENTS ]
+# this is a comment
+# this is a inline comment #
 
-# primitives #
-strLit = "hello world!"
-numLit = 42
-objLit = (){} # equal to {}
+# [ PRIMITIVES ]
+# variables are immutable by default
+string: "" = "hello world!" # types are inferred
+int: 0 = 42 # explicit types can be done with an instance of the desired primitve
+obj: {} = (){
+    println string
+}
+char: '' = 'goodbye world' # c style string
 
-# objects are blocks of code #
-person = (name: str, age: int){
-    .name = name # defines name as an accessible key
-    .age = age
-    .greet = { "hi " + .name println }
-    . # dot holds all keys defined in the current scope
-}: obj<person>
+# mutability can be achieved with `&`
+mutString = &"this can change"
+mutInt = &124
+mutObj = &{}
+mutChar = &'so can this'
 
-# assignments are single-expression greedy, so grouping is necessary
-john = (
-    person 
-    "john" # liv is whitespace insensitive
-    36     # so this is totally chill
-) 
-john.greet #=> hi john
+# [ OBJECTS ]
+# objects and functions are synonymous
 
-# objects will consume any literals around them that fit their parameters
-sam = ("sam" person 25)
-sam.name println #=> sam
-
-# object references can be accessed with parentheses
-ex = { "this is the return value" }
-(ex) # wrapping a function in parentheses prevents evaluation
-println #=> [obj: ex]
-println ex #=> this is the return value
-
-# control flow #
-if true {
-    println "this was bound to happen"
-} else {
-    println "not as bound to happen"
-}; # ; is just a function that returns void and consumes any stray literals
-
-# concurrency #
-result = ?(){ # async obj literal
-    "this is an asynchronous function!"
-}(): str
-
-?result println # `?` awaits result
-
-# function/operator overloading #
-exclaim = (strVal: str){
-    strVal + "!"
-}: str
-
-exclaim += (intVal: int){ # += overloads the previous defintion
-    intVal toString + "!"
-}: str
-
-exclaim "hi" println #=> hi!
-exclaim 21 println #=> 21!

@@ -24,7 +24,8 @@ char* readfile(char* filename){
 
     fread(buffer, 1, length, file);
     buffer[length] = '\0';
-
+    
+    fclose(file);
     return buffer;
 }
 
@@ -43,5 +44,6 @@ int main(int argc, char* argv[]){
     } else {
         char* data = readfile(argv[1]);
         parse(data);
+        free(data);
     }
 }
