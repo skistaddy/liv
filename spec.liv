@@ -6,12 +6,12 @@
 # variables are immutable by default
 string: "" = "hello world!" # types are inferred
 int: 0 = 42 # explicit types can be done with an instance of the desired primitve
+char: '' = 'goodbye world' # c style string
 obj: {} = (){
     println string
 }
-char: '' = 'goodbye world' # c style string
 
-# mutability can be achieved with `&`
+# mutability can be achieved with &
 mutString = &"this can change"
 mutInt = &124
 mutObj = &{}
@@ -19,4 +19,60 @@ mutChar = &'so can this'
 
 # [ OBJECTS ]
 # objects and functions are synonymous
+retString = { # unparameterized object
+    "this will return" # literals return
+}: "" # return type
 
+# this is a parameterized object or "function"
+person = (name: "", age: 0){
+    .name = name # the dot operator defines a public key
+    .age = age
+    .info = {
+        println (.name + " is " + (.age toString))
+    }
+}
+baran = person("baran" 21)
+baran.info #=> baran is 21
+
+# you can get all keys of an object like so
+baran. println #=> [name, age, info]
+
+# inside of an object, the . operator returns all keys
+constructor = {
+    .val = "default"
+    . # this is a literal so it will return
+}
+println constructor #-> [val]
+
+# objects can be overloaded with +=
+constructor += (str: ""){
+    .val = str
+}
+
+# [ EVALUATION ]
+# objects/functions in liv are evaluated on reference and will consume
+# any literals or expressions that resolve to literals around them
+println "hello"
+# is the same as
+"hello" println
+
+# function chains have their own individual scopes. any parameters
+# outside of their immediate parentheses group will be ignored.
+retString (println) # this will not work
+
+# this allows for functions literals stored in variables to be accessed
+# without being evaluated on reference of the variable
+println (retString) #=> error: can't print object
+
+# function chains will keep evaluating as long as their are literals being
+# returned and consumed. code execution only stops on a literal not being consumed
+1234 toString + retString println #=> "1234this will return"
+
+# [ REFERENCES ]
+# the ampersand when combined with a literal value makes it mutable. but when
+# combined with an already defined identifier, it makes a reference to that identifier
+x = &5 # mutable int
+y = &x # reference to x
+println (&y toString) #=> 5
+&y = 8 # set x to 8
+println x #=> 8
